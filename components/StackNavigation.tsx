@@ -1,13 +1,13 @@
-
-
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { BookingEntity } from "../entities/BookingEntity";
+import DeleteScreen from "../screens/DeleteScreen";
 import EditScreen from "../screens/EditScreen";
 import ListScreen from "../screens/ListScreen";
 
 export type StackMain = {
-    List: undefined;
+    Bookings: undefined;
     Edit: { booking: BookingEntity };
+    Delete: {booking: BookingEntity};
   };
 
 const Stack = createNativeStackNavigator<StackMain>();
@@ -15,8 +15,10 @@ const Stack = createNativeStackNavigator<StackMain>();
 export default function Navigation() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="List" component={ListScreen} />
+            <Stack.Screen name="Bookings" component={ListScreen} />
             <Stack.Screen name="Edit" component={EditScreen} />
+            <Stack.Screen name="Delete" component={DeleteScreen} />
         </Stack.Navigator>
     );
   }
+  

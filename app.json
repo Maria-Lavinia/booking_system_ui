@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "booking_system_ui",
-    "slug": "booking_system_ui",
+    "name": "app-bookings",
+    "slug": "app-bookings",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

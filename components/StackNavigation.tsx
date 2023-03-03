@@ -16,7 +16,7 @@ export default function Navigation() {
     return (
         <Stack.Navigator>
             <Stack.Screen name="Bookings" component={ListScreen} />
-            <Stack.Screen name="Edit" component={EditScreen}  options={{ title: "Modify your booking" }} />
+            <Stack.Screen name="Edit" component={EditScreen}options={{ title: "Modify your booking" }} />
             <Stack.Screen name="Delete" component={DeleteScreen} options={{ title: "Delete your booking" }}/>
         </Stack.Navigator>
     );

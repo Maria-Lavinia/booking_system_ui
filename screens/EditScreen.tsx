@@ -6,32 +6,99 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
+  DatePickerIOS,
 } from "react-native";
 import { StackMain } from "../components/StackNavigation";
 import { BookingEntity } from "../entities/BookingEntity";
+import { BookingsContext } from "../components/TabNavigation";
+import { useContext, useState } from "react";
+import axios from "axios";
 
 type deleteScreenProp = StackNavigationProp<StackMain, "Delete">;
 
 export default function EditScreen(props: any) {
   const booking: BookingEntity = props.route.params.booking;
   const navigation = useNavigation<deleteScreenProp>();
+  const [name, setName] = useState(booking.name);
+  const [numberOfPeople, setNumberOfPeople] = useState(
+    booking.numberOfPeople.toLocaleString()
+  );
+  const [date, setDate] = useState(new Date(booking.date));
+  const [phone, setPhone] = useState(booking.phone);
+  const [email, setEmail] = useState(booking.email);
+  const [comment, setComment] = useState(booking.comment);
+  const { bookings, setBookings } = useContext(BookingsContext);
+
+  const handleEdit = () => {
+    const bookingId = props.route.params.booking.id;
+
+    axios
+      .put("https://485c-130-226-161-125.eu.ngrok.io/bookings/" + bookingId, {
+        name,
+        numberOfPeople,
+        date,
+        phone,
+        email,
+        comment,
+      })
+      .then((response) => {
+        console.log(response.data);
+        const index = bookings.findIndex((booking) => booking.id === bookingId);
+        if (index === -1) {
+          setBookings(bookings);
+        } else {
+          const newBookings = [
+            ...bookings.slice(0, index),
+            response.data,
+            ...bookings.slice(index + 1),
+          ];
+          setBookings(newBookings);
+        }
+      })
+      .catch((error) => {
+        console.log("Error:", error.message);
+        console.log("Request:", error.config);
+        console.log("Response:", error.response.data);
+      });
+  };
 
   return (
-    <View>
+    <ScrollView>
       <View>
-        <TextInput style={styles.input} accessibilityLabelledBy={"Name"}>
-          {booking.name}
-        </TextInput>
-        <TextInput style={styles.input}>{booking.numberOfPeople}</TextInput>
-        <TextInput style={styles.input}>{booking.phone}</TextInput>
-        <TextInput style={styles.input}>{booking.email}</TextInput>
-        <TextInput style={styles.input}>{booking.comment}</TextInput>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => setName(text)}
+          defaultValue={name}
+        ></TextInput>
+        <TextInput
+          style={styles.input}
+          onChangeText={(number) => setNumberOfPeople(number)}
+          defaultValue={numberOfPeople}
+        ></TextInput>
+        <DatePickerIOS
+          maximumDate={new Date(2100, 11, 31)}
+          date={date}
+          onDateChange={(selectedDate) => setDate(selectedDate)}
+        ></DatePickerIOS>
+        <TextInput
+          style={styles.input}
+          defaultValue={phone}
+          onChangeText={(text) => setPhone(text)}
+        ></TextInput>
+        <TextInput
+          style={styles.input}
+          defaultValue={email}
+          onChangeText={(text) => setEmail(text)}
+        ></TextInput>
+        <TextInput
+          style={styles.input}
+          defaultValue={comment}
+          onChangeText={(text) => setComment(text)}
+        ></TextInput>
       </View>
       <View style={styles.btnContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          // onPress={}
-        >
+        <TouchableOpacity style={styles.button} onPress={handleEdit}>
           <Text style={styles.text}>Edit</Text>
         </TouchableOpacity>
 
@@ -42,7 +109,7 @@ export default function EditScreen(props: any) {
           <Text style={styles.text}>Delete</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

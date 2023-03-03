@@ -10,14 +10,14 @@ export type StackMain = {
     Delete: {booking: BookingEntity};
   };
 
-const Stack = createNativeStackNavigator<StackMain>();
+const Stack = createNativeStackNavigator();
 
 export default function Navigation() {
     return (
         <Stack.Navigator>
             <Stack.Screen name="Bookings" component={ListScreen} />
-            <Stack.Screen name="Edit" component={EditScreen} />
-            <Stack.Screen name="Delete" component={DeleteScreen} />
+            <Stack.Screen name="Edit" component={EditScreen}  options={{ title: "Modify your booking" }} />
+            <Stack.Screen name="Delete" component={DeleteScreen} options={{ title: "Delete your booking" }}/>
         </Stack.Navigator>
     );
   }

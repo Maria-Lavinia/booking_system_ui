@@ -12,7 +12,7 @@ export default function ListScreen() {
   useEffect(() => {
     const getBookings = async () => {
       axios
-        .get("https://d8c3-130-226-161-125.eu.ngrok.io/bookings")
+        .get("https://485c-130-226-161-125.eu.ngrok.io/bookings")
         .then((response) => {
           console.log(response.data);
           setBookings(response.data);

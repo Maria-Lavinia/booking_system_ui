@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
   DatePickerIOS,
   ScrollView,
 } from "react-native";
-import DatePicker from 'react-native-date-picker'
+import { BookingsContext } from "../components/TabNavigation";
 
 export default function CreateScreen(props: any) {
   const [name, setName] = useState("");
@@ -18,9 +18,11 @@ export default function CreateScreen(props: any) {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [comment, setComment] = useState("");
+  const { addBooking } = useContext(BookingsContext);
+  
   const createBooking = async () => {
     axios
-      .post("https://d8c3-130-226-161-125.eu.ngrok.io/bookings", {
+      .post("https://485c-130-226-161-125.eu.ngrok.io/bookings", {
         name,
         numberOfPeople,
         date,
@@ -30,12 +32,22 @@ export default function CreateScreen(props: any) {
       })
       .then((response) => {
         console.log(response.data);
+        addBooking(response.data);
 
       })
       .catch((error) => {
         console.log(error);
       });
-     
+      clearForm();
+  };
+
+  const clearForm = () => {
+    setName("");
+    setNumberOfPeople("");
+    setDate(new Date());
+    setPhone("");
+    setEmail("");
+    setComment("");
   };
 
   return (
@@ -46,36 +58,35 @@ export default function CreateScreen(props: any) {
           placeholder="Name"
           value={name}
           onChangeText={(text) => setName(text)}
-          autoFocus={true}
         ></TextInput>
         <TextInput
           style={styles.input}
           placeholder="Number of people"
           value={numberOfPeople}
           onChangeText={(text) => setNumberOfPeople(text)}
-          autoFocus={true}
         ></TextInput>
-        <DatePickerIOS maximumDate={new Date(2100, 11, 31)} date={date} onDateChange={(date) => setDate(date)}></DatePickerIOS>
+           <DatePickerIOS
+          maximumDate={new Date(2100, 11, 31)}
+          date={date}
+          onDateChange={(date) => setDate(date)}
+        ></DatePickerIOS>
         <TextInput
           style={styles.input}
           placeholder="Phone"
           value={phone}
           onChangeText={(text) => setPhone(text)}
-          autoFocus={true}
         ></TextInput>
         <TextInput
           style={styles.input}
           placeholder="Email"
           value={email}
           onChangeText={(text) => setEmail(text)}
-          autoFocus={true}
         ></TextInput>
         <TextInput
           style={styles.input}
           placeholder="Comment"
           value={comment}
           onChangeText={(text) => setComment(text)}
-          autoFocus={true}
         ></TextInput>
       </View>
       <View style={styles.btnContainer}>
@@ -112,6 +123,6 @@ const styles = StyleSheet.create({
   btnContainer: {
     marginTop: 8,
     flexDirection: "row",
-    flexWrap: "wrap",
+    justifyContent: "center",
   },
 });
